@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('generate')
+  @Get('')
   async sendAccessTokenToDrivey(@Query('code') code: string) {
     return this.appService.sendAccessTokenToDrivey(code);
   }

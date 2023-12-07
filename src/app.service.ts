@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as fs from 'fs';
+import axios from 'axios';
 import { google } from 'googleapis';
 
 @Injectable()
@@ -17,20 +17,20 @@ export class AppService {
     );
 
     try {
+      const drivey_url = this.configService.get<string>('DRIVEY_ENDPOINT');
       const tokens = await oauth2Client.getToken(code);
-      const filePath = 'tokens.json';
 
-      if (fs.existsSync(filePath)) {
-        fs.writeFileSync(filePath, JSON.stringify(tokens.tokens));
-        console.log('Tokens overwritten in tokens.json');
-      } else {
-        fs.writeFileSync(filePath, JSON.stringify(tokens.tokens));
-        console.log('Tokens saved to tokens.json');
-      }
-      process.exit(0);
+      console.log(tokens);
+
+      await axios.post(drivey_url, {
+        access_token: tokens.tokens.access_token,
+        refresh_token: tokens.tokens.refresh_token,
+      });
+
+      return "Access granted successfully. You may close this window if ti's not closed automatically.";
     } catch (err) {
       console.error('Error getting tokens:', err);
-      process.exit(1);
+      return 'Error getting tokens:' + err;
     }
   }
 }
