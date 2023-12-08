@@ -27,7 +27,7 @@ export class AppService {
         refresh_token: tokens.tokens.refresh_token,
       });
 
-      return "Access granted successfully. You may close this window if ti's not closed automatically.";
+      return "Access granted successfully. You may close this window if it's not closed automatically.";
     } catch (err) {
       console.error('Error getting tokens:', err);
       return 'Error getting tokens:' + err;
